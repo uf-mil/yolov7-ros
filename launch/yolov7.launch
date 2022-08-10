@@ -1,14 +1,14 @@
 <launch>
-    <node pkg="yolov7-ros" type="detect_ros.py" name="detect" output="screen"
+    <node pkg="yolov7_ros" type="detect_ros.py" name="detect" output="screen"
     ns="yolov7">
         <!-- Download the official weights from the original repo -->
-        <param name="weights_path" type="str" value="" />
+        <param name="weights_path" type="str" value="$(find yolov7_ros)/src/best.pt" />
         <!-- topic name to subscribe to -->
-        <param name="img_topic" type="str" value="/raw_image" />
+        <param name="img_topic" type="str" value="/wamv/sensors/cameras/front_left_camera/image_raw" />
         <!-- topic name for the detection output -->
-        <param name="out_topic" type="str" value="yolov7" />
+        <param name="out_topic" type="str" value="detections" />
         <!-- confidence threshold -->
-        <param name="conf_thresh" type="double" value="0.4" />
+        <param name="conf_thresh" type="double" value="0.75" />
         <!-- intersection over union threshold -->
         <param name="iou_thresh" type="double" value="0.45" />
         <!-- queue size for publishing -->

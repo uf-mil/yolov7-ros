@@ -203,8 +203,8 @@ include_directories(
 
 # Download yolov7.weights
 set(PATH "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(FILE1 "${PATH}/best.pt) # VRX weights
-set(FILE2 "${PATH}/yolov7_training.pt) # General Yolov7 weights for transfer learning
+set(FILE1 "${PATH}/best.pt") # VRX weights
+set(FILE2 "${PATH}/yolov7_training.pt") # General Yolov7 weights for transfer learning
 message(STATUS "Checking and downloading yolov7 weights if needed ...")
 if (NOT EXISTS "${FILE1}")
   message(STATUS "... file does not exist. Downloading now ...")

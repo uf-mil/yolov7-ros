@@ -31,7 +31,7 @@ def create_detection_msg(img_msg: Image, detections: torch.Tensor) -> Detection2
         single_detection_msg.header = header
 
         # src img
-        single_detection_msg.source_img = img_msg
+        #single_detection_msg.source_img = img_msg
 
         # bbox
         bbox = BoundingBox2D()

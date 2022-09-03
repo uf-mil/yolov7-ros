@@ -203,14 +203,19 @@ include_directories(
 
 # Download yolov7.weights
 set(PATH "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(FILE1 "${PATH}/best.pt") # VRX weights
-set(FILE2 "${PATH}/yolov7_training.pt") # General Yolov7 weights for transfer learning
+set(FILE1 "${PATH}/mil_weights/best.pt") # VRX weights
+set(FILE2 "${PATH}/mil_weights/robotx.pt") # RobotX weights
+set(FILE3 "${PATH}/mil_weights/yolov7_training.pt") # General Yolov7 weights for transfer learning
 message(STATUS "Checking and downloading yolov7 weights if needed ...")
 if (NOT EXISTS "${FILE1}")
   message(STATUS "... file does not exist. Downloading now ...")
   execute_process(COMMAND wget -q https://github.com/uf-mil/mil/releases/download/yolov7-v1/best.pt -P ${PATH})
 endif()
 if (NOT EXISTS "${FILE2}")
+  message(STATUS "... file does not exist. Downloading now ...")
+  execute_process(COMMAND wget -q https://github.com/uf-mil/mil/releases/download/yolov7-v2/robotx.pt -P ${PATH})
+endif()
+if (NOT EXISTS "${FILE3}")
   message(STATUS "... file does not exist. Downloading now ...")
   execute_process(COMMAND wget -q https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7_training.pt -P ${PATH})
 endif()

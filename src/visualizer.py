@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 from typing import List
 
-'''
 CLASSES = {
         0: "yellow_cylinder",
         1: "black_round",
@@ -22,6 +21,7 @@ CLASSES = {
         4: "mb_round_buoy_black",
         5: "mb_round_buoy_orange"
     }
+'''
 
 def get_random_color(seed):
     gen = np.random.default_rng(seed)

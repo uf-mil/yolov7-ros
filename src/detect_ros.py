@@ -17,6 +17,7 @@ import rospy
 from vision_msgs.msg import Detection2DArray, Detection2D, BoundingBox2D
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+import yaml
 
 
 def rescale(ori_shape: Tuple[int, int], boxes: Union[torch.Tensor, np.ndarray],
@@ -67,7 +68,8 @@ class Yolov7Publisher:
                  iou_thresh: float = 0.45, pub_topic: str = "yolov7_detections",
                  device: str = "cuda",
                  img_size: Union[Tuple[int, int], None] = (640, 640),
-                 queue_size: int = 1, visualize: bool = False):
+                 queue_size: int = 1, visualize: bool = False,
+                 data_yaml=""):
         """
         :param img_topic: name of the image topic to listen to
         :param weights: path/to/yolo_weights.pt
@@ -104,6 +106,13 @@ class Yolov7Publisher:
         self.detection_publisher = rospy.Publisher(
             pub_topic, Detection2DArray, queue_size=queue_size
         )
+
+        with open(data_yaml, "r") as stream:
+            try:
+                self.class_names = yaml.safe_load(stream)["names"]
+            except yaml.YAMLError as exc:
+                print(exc)
+
         rospy.loginfo("YOLOv7 initialization complete. Ready to start inference")
 
     def process_img_msg(self, img_msg: Image):
@@ -149,7 +158,7 @@ class Yolov7Publisher:
             bboxes = [[int(x1), int(y1), int(x2), int(y2)]
                       for x1, y1, x2, y2 in detections[:, :4].tolist()]
             classes = [int(c) for c in detections[:, 5].tolist()]
-            vis_img = draw_detections(np_img_orig, bboxes, classes)
+            vis_img = draw_detections(np_img_orig, bboxes, classes, self.class_names)
             vis_msg = self.bridge.cv2_to_imgmsg(vis_img, encoding="bgr8")
             self.visualization_publisher.publish(vis_msg)
 
@@ -168,6 +177,7 @@ if __name__ == "__main__":
     img_size = rospy.get_param(ns + "img_size")
     visualize = rospy.get_param(ns + "visualize")
     device = rospy.get_param(ns + "device")
+    data_yaml = rospy.get_param(ns + "data_yaml")
 
     # some sanity checks
     if not os.path.isfile(weights_path):
@@ -185,7 +195,8 @@ if __name__ == "__main__":
         conf_thresh=conf_thresh,
         iou_thresh=iou_thresh,
         img_size=(img_size, img_size),
-        queue_size=queue_size
+        queue_size=queue_size,
+        data_yaml=data_yaml
     )
 
     rospy.spin()

@@ -6,6 +6,7 @@
     <arg name="conf_thresh" default="0.75" />
     <arg name="image_size" default="640" />
     <arg name="device" default="cuda" />
+    <arg name="data_yaml" default="$(find yolov7_ros)/src/data/buoys.yaml"/>  
 
     <node pkg="yolov7_ros" type="detect_ros.py" name="$(anon detect)" output="screen"
     ns="yolov7">
@@ -28,5 +29,7 @@
         <param name="visualize" type="bool" value="true" />
         <!-- 'cuda' or 'cpu' -->
         <param name="device" type="str" value="$(arg device)" />
+        <!-- yaml file that holds the information of class names -->
+        <param name="data_yaml" type="str" value="$(arg data_yaml)" />
     </node>
 </launch>

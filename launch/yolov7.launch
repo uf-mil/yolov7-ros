@@ -7,7 +7,7 @@
     <arg name="image_size" default="640" />
     <arg name="device" default="cuda" />
 
-    <node pkg="yolov7_ros" type="detect_ros.py" name="detect" output="screen"
+    <node pkg="yolov7_ros" type="detect_ros.py" name="$(anon detect)" output="screen"
     ns="yolov7">
         <!-- Download the official weights from the original repo -->
         <param name="weights_path" type="str" value="$(arg weights)" />

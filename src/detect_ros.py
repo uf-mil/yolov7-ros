@@ -155,7 +155,7 @@ class Yolov7Publisher:
 
 
 if __name__ == "__main__":
-    rospy.init_node("yolov7_node")
+    rospy.init_node("yolov7_node", anonymous=True)
 
     ns = rospy.get_name() + "/"
 

@@ -118,7 +118,7 @@ class Yolov7Publisher:
     def process_img_msg(self, img_msg: Image):
         """ callback function for publisher """
         np_img_orig = self.bridge.imgmsg_to_cv2(
-                img_msg, desired_encoding='passthrough'
+                img_msg, desired_encoding='bgr8'
         )
 
         # handle possible different img formats

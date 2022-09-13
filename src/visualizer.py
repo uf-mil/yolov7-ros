@@ -11,9 +11,9 @@ def get_random_color(seed):
 
 
 def draw_detections(
-    img: np.array, bboxes: List[List[int]], classes: List[int], class_names: List[str]
+        img: np.array, bboxes: List[List[int]], classes: List[int], class_names: List[str], confs: List[float]
 ):
-    for bbox, cls in zip(bboxes, classes):
+    for bbox, cls, conf in zip(bboxes, classes, confs):
         x1, y1, x2, y2 = bbox
 
         text = class_names[cls]
@@ -21,8 +21,7 @@ def draw_detections(
         # Get color and background color for label name
         if "red" in text:
             background_color = (255, 0, 0)
-            color = (0, 0, 0)
-            print("red")
+            color = (255, 255, 255)
         elif "orange" in text:
             background_color = (255, 127, 0)
             color = (0, 0, 0)
@@ -48,6 +47,7 @@ def draw_detections(
             background_color = get_random_color(int(cls))
             color = (0, 0, 0)
 
+        text = f"{text} {conf:.0%}"
         # Create label and background box for label
         img = cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), background_color, 3)
         x_text = int(x1)

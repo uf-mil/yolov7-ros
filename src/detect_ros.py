@@ -118,7 +118,7 @@ class Yolov7Publisher:
     def process_img_msg(self, img_msg: Image):
         """ callback function for publisher """
         np_img_orig = self.bridge.imgmsg_to_cv2(
-                img_msg, desired_encoding='rgb8'
+                img_msg, desired_encoding='bgr8'
         )
 
         # handle possible different img formats
@@ -160,7 +160,7 @@ class Yolov7Publisher:
             classes = [int(c) for c in detections[:, 5].tolist()]
             confs = [float(conf) for conf in detections[:, 4].tolist()]
             vis_img = draw_detections(np_img_orig, bboxes, classes, self.class_names, confs)
-            vis_msg = self.bridge.cv2_to_imgmsg(vis_img, encoding="rgb8")
+            vis_msg = self.bridge.cv2_to_imgmsg(vis_img, encoding="bgr8")
             self.visualization_publisher.publish(vis_msg)
 
 

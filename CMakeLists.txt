@@ -51,11 +51,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  ObjectTracking2D.msg
-  ObjectTracking2DArray.msg
-)
+#add_message_files(
+#  FILES
+#  ObjectTracking2D.msg
+#  ObjectTracking2DArray.msg
+#)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -200,6 +200,30 @@ include_directories(
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
+
+# Download yolov7.weights
+set(PATH "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(FILE1 "${PATH}/mil_weights/best.pt") # VRX weights
+set(FILE2 "${PATH}/mil_weights/robotx.pt") # RobotX weights
+set(FILE3 "${PATH}/mil_weights/yolov7_training.pt") # General Yolov7 weights for transfer learning
+set(FILE4 "${PATH}/mil_weights/stc.pt") # Weights for STC Buoy
+message(STATUS "Checking and downloading yolov7 weights if needed ...")
+if (NOT EXISTS "${FILE1}")
+  message(STATUS "... file does not exist. Downloading now ...")
+  execute_process(COMMAND wget -q https://github.com/uf-mil/mil/releases/download/yolov7-v1/best.pt -P ${PATH}/mil_weights)
+endif()
+if (NOT EXISTS "${FILE2}")
+  message(STATUS "... file does not exist. Downloading now ...")
+  execute_process(COMMAND wget -q https://github.com/uf-mil/mil/releases/download/yolov7-v5/robotx.pt -P ${PATH}/mil_weights)
+endif()
+if (NOT EXISTS "${FILE3}")
+  message(STATUS "... file does not exist. Downloading now ...")
+  execute_process(COMMAND wget -q https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7_training.pt -P ${PATH}/mil_weights)
+endif()
+if (NOT EXISTS "${FILE4}")
+  message(STATUS "... file does not exist. Downloading now ...")
+  execute_process(COMMAND wget -q https://github.com/uf-mil/mil/releases/download/yolov7-stc-v2/stc.pt -P ${PATH}/mil_weights)
+endif()
 
 #############
 ## Testing ##

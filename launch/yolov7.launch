@@ -1,24 +1,35 @@
 <launch>
-    <node pkg="yolov7-ros" type="detect_ros.py" name="detect" output="screen"
+
+    <arg name="weights" default="$(find yolov7_ros)/src/best.pt" />
+    <arg name="image_topic" default="/wamv/sensors/cameras/front_left_camera/image_raw" />
+    <arg name="out_topic" default="detections" />
+    <arg name="conf_thresh" default="0.75" />
+    <arg name="image_size" default="640" />
+    <arg name="device" default="cuda" />
+    <arg name="data_yaml" default="$(find yolov7_ros)/src/data/buoys.yaml"/>  
+
+    <node pkg="yolov7_ros" type="detect_ros.py" name="$(anon detect)" output="screen"
     ns="yolov7">
         <!-- Download the official weights from the original repo -->
-        <param name="weights_path" type="str" value="" />
+        <param name="weights_path" type="str" value="$(arg weights)" />
         <!-- topic name to subscribe to -->
-        <param name="img_topic" type="str" value="/raw_image" />
+        <param name="img_topic" type="str" value="$(arg image_topic)" />
         <!-- topic name for the detection output -->
-        <param name="out_topic" type="str" value="yolov7" />
+        <param name="out_topic" type="str" value="$(arg out_topic)" />
         <!-- confidence threshold -->
-        <param name="conf_thresh" type="double" value="0.4" />
+        <param name="conf_thresh" type="double" value="$(arg conf_thresh)" />
         <!-- intersection over union threshold -->
         <param name="iou_thresh" type="double" value="0.45" />
         <!-- queue size for publishing -->
         <param name="queue_size" type="int" value="1" />
         <!-- image size to which to resize each input image before feeding into the
         network (the final output is rescaled to the original image size) -->
-        <param name="img_size" type="int" value="640" />
+        <param name="img_size" type="int" value="$(arg image_size)" />
         <!-- flag whether to also publish image with the visualized detections -->
         <param name="visualize" type="bool" value="true" />
         <!-- 'cuda' or 'cpu' -->
-        <param name="device" type="str" value="cuda" />
+        <param name="device" type="str" value="$(arg device)" />
+        <!-- yaml file that holds the information of class names -->
+        <param name="data_yaml" type="str" value="$(arg data_yaml)" />
     </node>
 </launch>

@@ -11,7 +11,7 @@ def get_random_color(seed):
 
 
 def draw_detections(
-        img: np.array, bboxes: List[List[int]], classes: List[int], class_names: List[str], confs: List[float]
+        img: np.array, bboxes: List[List[int]], classes: List[int], class_names: List[str], confs: List[float], encoding: str
 ):
     for bbox, cls, conf in zip(bboxes, classes, confs):
         x1, y1, x2, y2 = bbox
@@ -46,6 +46,13 @@ def draw_detections(
         else:
             background_color = get_random_color(int(cls))
             color = (0, 0, 0)
+
+        # Transform colors to match encoding
+        if encoding == "rgb8":
+            background_color = background_color[::-1]
+        elif encoding != "bgr8": # Use black for all labels if encoding is undefined
+            background_color = (0, 0, 0)
+            color = (255, 255, 255)
 
         text = f"{text} {conf:.0%}"
         # Create label and background box for label

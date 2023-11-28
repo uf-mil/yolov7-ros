@@ -45,7 +45,7 @@ Each time a new image is received it is then fed into YOLOv7.
 
 ### Notes
 - The detections are published using the [vision_msgs/Detection2DArray](http://docs.ros.org/en/api/vision_msgs/html/msg/Detection2DArray.html) message type.
-- The detections will be published under `/yolov7/out_topic`.
+- The detections will be published under `/yolov7/out_topic` defined in the [launch file](launch/yolov7.launch).
 - If you set the `visualize` parameter to `true`, the detections will be drawn into 
   the image, which is then published under `/yolov7/out_topic/visualization`.
 
@@ -56,15 +56,14 @@ Each time a new image is received it is then fed into YOLOv7.
 - This can be accomplished by moving your labelbox export within this repo, change the filename within ```labelbox_json2yolo.py```, run this python script. (This can take a while if your dataset is large.)
 - This will create a directory with the same name as your .json file you exported.
 - Within this new directory, you will see an images folder and a labels folder.
-- Create a train and val folder within both the images and labels folders of, and place a certain number of files within each folder. (Make sure the files correspond with each other. Ex. if image1.png is in train, ensure image1.txt is in labels.)
-From within the src directory.
-- Within buoys.yaml, make the train go to the path ```<zip file name>/images/train```, and make the val go to path ```<zip file name>/images/val```
+- Create a train and val folder within both the images and labels folders, and place a certain number of files within each folder. (Make sure the files correspond with each other. Ex. if image1.png is in train, ensure image1.txt is in labels.)
+- Within the file set as `data.yaml` in the [launch file](launch/yolov7.launch), make the train go to the path ```<zip file name>/images/train```, and make the val go to path ```<zip file name>/images/val```
 - Move this the folder containing the images and labels to the src directory of the yolov7_ros package.
 - Move the .yaml within the folder you just moved into yolov7-ros/src/data.
-- Also note, if you have more than 6 classes, you may have to modify cfg/training/yolov7.yaml to represent this as well.
+- Confirm in `cfg/training/yolov7.yaml` the number of possible classes.
 - Run the following command, feel free to change any parameters as you see fit. You can see what params you can change within train.py.
 ```python3 train.py --workers 8 --device 0 --batch-size 4 --data data/buoys.yaml --img 640 360 --cfg cfg/training/yolov7.yaml --weights 'yolov7_training.pt' --name yolov7 --hyp data/hyp.scratch.p5.yaml```
-- The resulting model (weights) will appear in "yolov7-ros/src/runs/train/yolov711/weights/best.pt".
+- The resulting model (weights) will appear in "yolov7-ros/src/runs/train/yolov71i/weights/best.pt" where that i is the number of iteration. The latest training results should have the bigger i, but double check the date just in case.
 
 ### MIL Single Image Testing
 ```python3 detect.py --weights runs/train/<path to best.pt> --conf 0.7 --img-size 640 --source buoys/images/<path to any image>```

@@ -187,6 +187,7 @@ if __name__ == "__main__":
     if not ("cuda" in device or "cpu" in device):
         raise ValueError("Check your device.")
 
+    rospy.loginfo('WEIGHTS PATH: {}'.format(weights_path))
     publisher = Yolov7Publisher(
         img_topic=img_topic,
         pub_topic=out_topic,

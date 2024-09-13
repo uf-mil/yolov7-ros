@@ -31,7 +31,9 @@ def create_detection_msg(img_msg: Image, detections: torch.Tensor) -> Detection2
         single_detection_msg.header = header
 
         # src img
-        #single_detection_msg.source_img = img_msg
+        # This is used for correlating the image that was used in the image classification
+        # with the appropriately timed objects in the LIDAR
+        single_detection_msg.source_img.header.stamp = img_msg.header.stamp
 
         # bbox
         bbox = BoundingBox2D()

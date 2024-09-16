@@ -17,6 +17,7 @@ import rospy
 from vision_msgs.msg import Detection2DArray, Detection2D, BoundingBox2D
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+from detection_server import DetectionServer
 import yaml
 
 
@@ -152,6 +153,9 @@ class Yolov7Publisher:
         # publishing
         detection_msg = create_detection_msg(img_msg, detections)
         self.detection_publisher.publish(detection_msg)
+        # post to detection library
+        DetectionServer.update_detections(np_img_resized, detections)
+
 
         # visualizing if required
         if self.visualization_publisher:

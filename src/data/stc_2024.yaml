@@ -1,0 +1,6 @@
+train: /home/zobelisk/Navigator_ML/RobotX_2024/light_tower_export/train/images
+val: /home/zobelisk/Navigator_ML/RobotX_2024/light_tower_export/val/images
+test: /home/zobelisk/Navigator_ML/RobotX_2024/light_tower_export/test/images
+
+nc: 4
+names: ['Green Light Tower', 'Red Light Tower', 'Blue Light Tower', 'Black Light Tower']

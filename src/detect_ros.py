@@ -86,6 +86,8 @@ class Yolov7Publisher:
         """
         self.img_size = img_size
         self.device = device
+        self.enabled = True
+        self.enabled_srv = rospy.Service("~set_enabled", SetBool, self.set_enable_srv)
 
         vis_topic = pub_topic + "visualization" if pub_topic.endswith("/") else \
             pub_topic + "/visualization"
@@ -115,8 +117,16 @@ class Yolov7Publisher:
 
         rospy.loginfo("YOLOv7 initialization complete. Ready to start inference")
 
+    def set_enable_srv(self, req):
+        self.enabled = req.data
+        return {"success": True}
+
     def process_img_msg(self, img_msg: Image):
         """ callback function for publisher """
+        # if disabled do not perform inference or publish
+        if not self.enabled:
+            return
+
         np_img_orig = self.bridge.imgmsg_to_cv2(
                 img_msg, desired_encoding='bgr8'
         )
